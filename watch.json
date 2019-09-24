@@ -14,7 +14,7 @@
     "include": [
       "\\.json",
       "start-all.sh",
-      "server.js"
+      "\\.js"
     ]
   },
   "throttle": 100
