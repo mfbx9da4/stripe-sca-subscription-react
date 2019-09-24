@@ -1,11 +1,8 @@
-import React from 'react';
+import React from 'react'
 import loadjs from 'loadjs'
-import {
-  StripeProvider,
-  Elements,
-} from 'react-stripe-elements';
+import { StripeProvider, Elements } from 'react-stripe-elements'
 
-const APIKEY = "pk_test_0vvTyliD10EvGy5S4sXRMWxl00knZhuQNf"
+const APIKEY = 'pk_test_0vvTyliD10EvGy5S4sXRMWxl00knZhuQNf'
 const isStripeLoaded = () => typeof window !== 'undefined' && 'Stripe' in window
 const loadStripe = async () =>
   new Promise(resolve =>
@@ -40,4 +37,3 @@ export const withStripe = WrappedComponent =>
       )
     }
   }
-
