@@ -18,8 +18,8 @@ const errToJSON = ({ name, message, stack }) => ({ error: { name, message, stack
 app.post('/setup_intents', async (req, res) => {
   try {
     const { options } = req.body
-    const paymentIntent = await stripe.setupIntents.create(options)
-    res.json(paymentIntent)
+    const intent = await stripe.setupIntents.create(options)
+    res.json(intent)
   } catch (err) {
     console.error('SetupIntent err', err)
     res.status(500).json(errToJSON(err))

@@ -23,6 +23,14 @@ div[row] {
   flex-direction: row;
 }
 
+.error {
+  border-left: 1px solid red;
+}
+
+.message {
+  border-left: 1px solid blue;
+}
+
 h1 {
   color: #32325d;
   font-weight: 400;
