@@ -66,19 +66,7 @@ class _CardForm extends React.Component {
     const paymentMethod = await this.getPaymentMethod()
     return this.attachPaymentMethod(paymentMethod)
   }
-
-  attachPaymentMethod = async paymentMethod => {
-    const attached = await api.attachPaymentMethod({
-      paymentMethod,
-      email: 'david@crowdform.co.uk'
-    })
-    console.log('attache', attached)
-    this.setState({
-      succeeded: true,
-      message: `Subscription started!`
-    })
-  }
-
+  
   getPaymentMethod = async () => {
     const payload = await this.props.stripe.handleCardSetup(this.state.clientSecret)
     if (payload.error) {
@@ -94,6 +82,18 @@ class _CardForm extends React.Component {
       message: `Setup succeeded! SetupIntent is in state: ${payload.setupIntent.status}`
     })
     return payload.setupIntent.payment_method
+  }
+
+  attachPaymentMethod = async paymentMethod => {
+    const attached = await api.attachPaymentMethod({
+      paymentMethod,
+      email: 'david@crowdform.co.uk'
+    })
+    console.log('attache', attached)
+    this.setState({
+      succeeded: true,
+      message: `Subscription started!`
+    })
   }
 
   render() {
