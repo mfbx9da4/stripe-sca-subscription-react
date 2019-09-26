@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { CardElement, Elements, injectStripe } from 'react-stripe-elements'
 import { withStripe } from './withStripe'
+import PropTypes from 'prop-types'
 import api from './api'
 // eslint-disable-next-line
 import style from './index.css'
@@ -39,14 +40,16 @@ const createOptions = (fontSize, padding) => {
   }
 }
 
-class _CardForm extends React.Component {
-  state = {
-    clientSecret: null,
-    error: null,
-    disabled: true,
-    succeeded: false,
-    processing: false,
-    message: null
+class _SCACardElement extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      clientSecret: null,
+      error: null
+    }
+    // We expose this so that when the form is submitted we can
+    // do 3D Secure from the parent 
+    props.getHandleCardSetupRef(this.handleCardSetup)
   }
 
   async componentDidMount() {
@@ -59,39 +62,76 @@ class _CardForm extends React.Component {
       this.setState({ error: err.message })
     }
   }
+  
+  handleCardSetup = async () => this.props.stripe.handleCardSetup(this.state.clientSecret)
+
+  render() {
+    const { error } = this.state
+    return (
+        <React.Fragment>
+          <CardElement
+            hidePostalCode
+            onBlur={handleBlur}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onReady={handleReady}
+            {...createOptions(this.props.fontSize)}
+          />
+        {error && <div className='error' key='SetupIntentError'>Setup Intent Error: {error}</div>}
+      </React.Fragment>
+    )
+  }
+}
+
+_SCACardElement.propTypes = {
+  getHandleCardSetupRef: PropTypes.func.isRequired
+};
+
+const Card = injectStripe(_SCACardElement)
+
+class _CardForm extends React.Component {
+  state = {
+    error: null,
+    disabled: true,
+    succeeded: false,
+    processing: false,
+    message: null
+  }
 
   handleSubmit = async ev => {
     ev.preventDefault()
     this.setState({ disabled: true, processing: true })
-    const paymentMethod = await this.getPaymentMethod()
-    return this.attachPaymentMethod(paymentMethod)
+    const paymentMethodId = await this.handleCardSetup()
+    if (paymentMethodId) return this.attachPaymentMethod(paymentMethodId)
   }
   
-  getPaymentMethod = async () => {
-    const payload = await this.props.stripe.handleCardSetup(this.state.clientSecret)
+  handleCardSetup = async () => {
+    const payload = await this.handleCardSetupRef()
     if (payload.error) {
-      console.log('[error]', payload.error)
-      this.setState({
-        error: `Setup failed: ${payload.error.message}`,
+      console.log('Handle Card Setup error', payload.error)
+      return this.setState({
+        error: `Handle Card Setup failed: ${payload.error.message}`,
         disabled: false
       })
-      return null
     }
-    console.log('[SetupIntent]', payload.setupIntent)
+    console.log('Setup intent', payload.setupIntent)
     this.setState({
-      message: `Setup succeeded! SetupIntent is in state: ${payload.setupIntent.status}`
+      message: `Setup succeeded! SetupIntent is in state: ${payload.setupIntent.status}`,
+      error: null
     })
     return payload.setupIntent.payment_method
   }
-
+  
   attachPaymentMethod = async paymentMethod => {
+    // Email hard coded for demo!
     const attached = await api.attachPaymentMethod({
-      paymentMethod,
-      email: 'david@crowdform.co.uk'
+      email: 'david@crowdform.co.uk',
+      paymentMethod
     })
-    console.log('attache', attached)
+    console.log('Attached', attached)
     this.setState({
       succeeded: true,
+      error: null,
       message: `Subscription started!`
     })
   }
@@ -104,17 +144,10 @@ class _CardForm extends React.Component {
           <a href="https://stripe.com/docs/testing#testing">More cards</a>.
         </label>
 
-        <CardElement
-          hidePostalCode
-          onBlur={handleBlur}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onReady={handleReady}
-          {...createOptions(this.props.fontSize)}
-        />
+        <Card getHandleCardSetupRef={ref => this.handleCardSetupRef = ref} />
 
-        {this.state.error && <div className="error">{this.state.error}</div>}
-        {this.state.message && <div className="message">{this.state.message}</div>}
+        {this.state.error && <div key='error' className="error">{this.state.error}</div>}
+        {this.state.message && <div key='message' className="message">{this.state.message}</div>}
 
         {!this.state.succeeded && (
           <button disabled={this.state.disabled}>
@@ -126,7 +159,8 @@ class _CardForm extends React.Component {
   }
 }
 
-const CardForm = injectStripe(_CardForm)
+// const CardForm = injectStripe(_CardForm)
+const CardForm = _CardForm
 
 class _Checkout extends React.Component {
   constructor() {
