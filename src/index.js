@@ -92,7 +92,7 @@ const Card = injectStripe(_SCACardElement)
 class _CardForm extends React.Component {
   state = {
     error: null,
-    disabled: true,
+    disabled: false,
     succeeded: false,
     processing: false,
     message: null
@@ -100,6 +100,7 @@ class _CardForm extends React.Component {
 
   handleSubmit = async ev => {
     ev.preventDefault()
+    console.log('submit')
     this.setState({ disabled: true, processing: true })
     const paymentMethodId = await this.handleCardSetup()
     if (paymentMethodId) return this.attachPaymentMethod(paymentMethodId)
@@ -150,7 +151,7 @@ class _CardForm extends React.Component {
         {this.state.message && <div key='message' className="message">{this.state.message}</div>}
 
         {!this.state.succeeded && (
-          <button disabled={this.state.disabled}>
+          <button type='submit' disabled={this.state.disabled}>
             {this.state.processing ? 'Processing…' : 'Start trial'}
           </button>
         )}
@@ -159,7 +160,7 @@ class _CardForm extends React.Component {
   }
 }
 
-// const CardForm = injectStripe(_CardForm)
+
 const CardForm = _CardForm
 
 class _Checkout extends React.Component {

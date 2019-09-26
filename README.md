@@ -8,14 +8,17 @@ To demo how to implement stripe SCA using react and node.
 
 > [MIRROR ON GITHUB](https://github.com/mfbx9da4/stripe-sca-subscription-react)
 
-![edAUunAs5S](https://user-images.githubusercontent.com/1690659/65525116-e8bc2700-dee6-11e9-814f-96ece40653cd.gif)
+![YfiWzk7Xdc](https://user-images.githubusercontent.com/1690659/65703231-58174f80-e07c-11e9-9352-8616bfdb52dc.gif)
+
 
 ### Aim
 
 - A step by step guide for integrating Stripe in an SCA compliant way for subscriptions.
-- If you just want a template project to copy, [you can see a live demo and fork the code here](https://glitch.com/edit/#!/stripe-sca-subscription-react).
 - Stripe React Elements github repository also has some [demo code](https://github.com/stripe/react-stripe-elements/tree/master/demo/intents) 
 which I made into a [working example here](https://glitch.com/edit/#!/stripe-react-elements-express).
+- [I made a live demo on glitch.com with working frontend and backend code you can fork it here, shown below](https://glitch.com/edit/#!/stripe-sca-subscription-react).
+
+![edAUunAs5S](https://user-images.githubusercontent.com/1690659/65525116-e8bc2700-dee6-11e9-814f-96ece40653cd.gif)
 
 ### Overview
 
