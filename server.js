@@ -37,6 +37,7 @@ const SUBSCRIPTION_PLAN = {
   trial_period_days: 30
 }
 
+
 app.post('/attach_payment_method', async (req, res) => {
   try {
     const { email, paymentMethod: paymentMethodId } = req.body.options
@@ -77,12 +78,13 @@ app.post('/attach_payment_method', async (req, res) => {
   }
 })
 
+
 app.use('/', function(req, res) {
   request('http://localhost:8000' + req.path)
     .on('error', err => {
       console.log('Error - middleware')
       console.log(err)
-      const restartScript = "<script>setTimeout(() => location.href = '/', 200)</script>"
+      const restartScript = "<script>setTimeout(() => location.href = '/', 400)</script>"
       return res.send('client not started yet, try refreshing in a few seconds' + restartScript)
     })
     .pipe(res)
