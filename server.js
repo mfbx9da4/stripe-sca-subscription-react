@@ -37,7 +37,6 @@ const SUBSCRIPTION_PLAN = {
   trial_period_days: 30
 }
 
-
 app.post('/attach_payment_method', async (req, res) => {
   try {
     const { email, paymentMethod: paymentMethodId } = req.body.options
@@ -77,7 +76,6 @@ app.post('/attach_payment_method', async (req, res) => {
     res.status(500).json(errToJSON(err))
   }
 })
-
 
 app.use('/', function(req, res) {
   request('http://localhost:8000' + req.path)
