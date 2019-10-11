@@ -14,9 +14,49 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+    <style>
+      .sponsor-container {
+        display: flex; 
+        font-size: 11px; 
+        align-items: center; 
+        justify-content: center; 
+        font-weight: 800; 
+        color: white; 
+        background: rgba(0,0,0,0.2);
+        border-radius: 60%;
+        width: 130px;
+        height: 130px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .sponsor-strong {
+        font-size: 0.8rem;
+        text-decoration: none;
+        color: white;
+      }
+    .sponsor {
+        margin-top: 0.8rem;
+        background: url(https://www.crowdform.co.uk/hntv/0807660d18c5f59dc238c50a2f365de7.png) no-repeat;
+        background-size: contain;
+        display: block;
+        margin-left: 8px;
+        width: 24px;
+        height: 24px;
+        font-size: 0;
+    }
+    .header a, .header a:visited {
+        color: #fff;
+        text-decoration: none;
+    }
+    </style>
   </head>
   <body>
     <div id="root">Loading Javascript ...</div>
+    <div class="sponsor-container">
+      Made by <br/> 
+      <a class='sponsor-strong' target='_blank' href='https://davidalbertoadler.com'><strong>David Adler</strong></a>
+       at <a class="sponsor" target='_blank' href="https://www.crowdform.co.uk/" title="Digital Product Studio - Crowdform">Crowdform</a>
+    </div>
     <script src='/bundle.js'></script>
   </body>
 </html>
